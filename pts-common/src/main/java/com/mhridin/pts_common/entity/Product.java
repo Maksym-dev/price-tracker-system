@@ -18,7 +18,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url", nullable = false, length = 1000)
+    @Column(unique = true, name = "url", nullable = false, columnDefinition = "TEXT")
     private String url;
 
     @Column(name = "title", nullable = false)

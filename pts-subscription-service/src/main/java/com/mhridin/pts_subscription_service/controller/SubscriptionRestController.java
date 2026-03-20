@@ -1,0 +1,105 @@
+package com.mhridin.pts_subscription_service.controller;
+
+import com.mhridin.pts_common.dto.SubscriptionDto;
+import com.mhridin.pts_common.entity.Product;
+import com.mhridin.pts_common.entity.Subscription;
+import com.mhridin.pts_common.entity.User;
+import com.mhridin.pts_common.exception.ProductNotFoundException;
+import com.mhridin.pts_common.exception.SubscriptionNotFoundException;
+import com.mhridin.pts_common.exception.UserNotFoundException;
+import com.mhridin.pts_common.repository.ProductRepository;
+import com.mhridin.pts_common.repository.SubscriptionRepository;
+import com.mhridin.pts_common.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@RestController
+@RequestMapping("/subscriptions")
+public class SubscriptionRestController {
+
+    private final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
+
+    private final SubscriptionRepository subscriptionRepository;
+
+    public SubscriptionRestController(UserRepository userRepository, ProductRepository productRepository, SubscriptionRepository subscriptionRepository) {
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.subscriptionRepository = subscriptionRepository;
+    }
+
+    @GetMapping
+    public List<SubscriptionDto> getAllSubscriptions() {
+        Iterable<Subscription> all = subscriptionRepository.findAll();
+        List<Subscription> subscriptions = StreamSupport.stream(all.spliterator(), false)
+                .toList();
+        return subscriptions.stream().map(elem -> {
+            SubscriptionDto dto = new SubscriptionDto();
+            dto.setId(elem.getId());
+            dto.setProductId(elem.getProduct().getId());
+            dto.setUserId(elem.getUser().getId());
+            dto.setTargetPrice(elem.getTargetPrice());
+            dto.setActive(elem.isActive());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SubscriptionDto> getSubscriptionById(@PathVariable Long id) {
+        Subscription subscription = subscriptionRepository.findById(id).orElseThrow(() -> new SubscriptionNotFoundException("Subscription with id " + id + " not found"));
+        SubscriptionDto dto = new SubscriptionDto();
+        dto.setId(subscription.getId());
+        dto.setProductId(subscription.getProduct().getId());
+        dto.setUserId(subscription.getUser().getId());
+        dto.setTargetPrice(subscription.getTargetPrice());
+        dto.setActive(subscription.isActive());
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping
+    public ResponseEntity<Subscription> createSubscription(@RequestBody SubscriptionDto subscriptionDto) {
+        User user = userRepository.findById(subscriptionDto.getUserId()).orElseThrow(() -> new UserNotFoundException("User with id " + subscriptionDto.getUserId() + " not found"));
+        Product product = productRepository.findById(subscriptionDto.getProductId()).orElseThrow(() -> new ProductNotFoundException("Product with id " + subscriptionDto.getProductId() + " not found"));
+
+        Subscription subscription = new Subscription();
+        subscription.setUser(user);
+        subscription.setProduct(product);
+        subscription.setTargetPrice(subscriptionDto.getTargetPrice());
+        subscription.setActive(subscriptionDto.isActive());
+
+        Subscription savedSubscription = subscriptionRepository.save(subscription);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSubscription);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateSubscription(@PathVariable("id") Long id, @RequestBody Subscription subscription) {
+        if (!Objects.equals(subscription.getId(), id)) {
+            throw new IllegalStateException("Subscription id and path variable are not the same");
+        }
+        Subscription fromDB = subscriptionRepository.findById(id).orElse(null);
+        if (fromDB == null) {
+            throw new SubscriptionNotFoundException("Subscription with id " + id + " not found");
+        }
+        fromDB.setActive(subscription.isActive());
+        fromDB.setTargetPrice(subscription.getTargetPrice());
+        subscriptionRepository.save(fromDB);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubscription(@PathVariable("id") Long id) {
+        Subscription fromDB = subscriptionRepository.findById(id).orElse(null);
+        if (fromDB == null) {
+            throw new SubscriptionNotFoundException("Subscription with id " + id + " not found");
+        }
+        subscriptionRepository.delete(fromDB);
+        return ResponseEntity.noContent().build();
+    }
+}
