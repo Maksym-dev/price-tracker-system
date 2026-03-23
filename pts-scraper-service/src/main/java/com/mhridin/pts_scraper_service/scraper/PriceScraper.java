@@ -1,32 +1,24 @@
 package com.mhridin.pts_scraper_service.scraper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class PriceScraper {
-    public BigDecimal scrape(String url) throws Exception {
-        Document doc = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                .timeout(5000)
-                .get();
 
-        // TODO Make choosing selector by domain
-        Element priceElement = doc.selectFirst(".product-price__big"); // CSS-selector for Rozetka domain
+    private final List<ScrapingStrategy> strategies;
 
-        if (priceElement == null) {
-            log.info("Price element not found for URL: {}", url);
-            return new BigDecimal(0);
-        }
-
-        // Clear string
-        String priceText = priceElement.text().replaceAll("[^0-9,.]", "").replace(",", ".");
-        return new BigDecimal(priceText);
+    public BigDecimal scrape(String url) {
+        return strategies.stream()
+                .filter(s -> s.supports(url))
+                .findFirst()
+                .orElseThrow(() -> new UnsupportedOperationException("Site " + url + " not supported"))
+                .fetchPrice(url);
     }
 }
