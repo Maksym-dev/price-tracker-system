@@ -1,9 +1,7 @@
 package com.mhridin.pts_scraper_service.scraper;
 
-import java.math.BigDecimal;
-
 public interface ScrapingStrategy {
-    BigDecimal fetchPrice(String url);
+    ScrapeResult fetch(String url);
 
     boolean supports(String url);
 }

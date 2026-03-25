@@ -35,6 +35,7 @@ public class PriceUpdateSubscriptionConsumer {
 
         BigDecimal oldPrice = product.getCurrentPrice();
         product.setCurrentPrice(event.getNewPrice());
+        product.setIsAvailable(event.getAvailableStatus());
         product.setLastUpdated(LocalDateTime.now());
         log.info("Price update for product id: {}, old price: {}, new price: {}",
                 event.getProductId(), oldPrice, event.getNewPrice());
@@ -44,14 +45,14 @@ public class PriceUpdateSubscriptionConsumer {
                 .findAllByProductIdAndIsActiveTrue(product.getId());
 
         for (Subscription sub : activeSubscriptions) {
-            if (shouldNotify(sub, event.getNewPrice())) {
+            if (shouldNotify(sub, event.getNewPrice(), event.getAvailableStatus())) {
                 sendNotificationEvent(sub, product, event.getNewPrice());
             }
         }
     }
 
-    private boolean shouldNotify(Subscription sub, BigDecimal newPrice) {
-        return newPrice.compareTo(sub.getTargetPrice()) <= 0;
+    private boolean shouldNotify(Subscription sub, BigDecimal newPrice, Boolean availableStatus) {
+        return Boolean.TRUE.equals(availableStatus) && newPrice.compareTo(sub.getTargetPrice()) <= 0;
     }
 
     private void sendNotificationEvent(Subscription sub, Product product, BigDecimal newPrice) {
