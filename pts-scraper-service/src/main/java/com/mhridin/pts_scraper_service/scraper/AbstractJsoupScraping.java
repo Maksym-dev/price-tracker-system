@@ -14,7 +14,7 @@ public abstract class AbstractJsoupScraping implements ScrapingStrategy {
     private final String domain;
 
     @Override
-    public BigDecimal fetchPrice(String url) {
+    public ScrapeResult fetch(String url) {
         Document doc;
         try {
             doc = Jsoup.connect(url)
@@ -22,10 +22,12 @@ public abstract class AbstractJsoupScraping implements ScrapingStrategy {
                     .timeout(5000)
                     .get();
 
-            return extractPriceFromDocument(doc);
+            BigDecimal price = extractPriceFromDocument(doc);
+            boolean availableStatus = extractAvailableStatusFromDocument(doc);
+            return new ScrapeResult(price, availableStatus);
         } catch (Exception e) {
             log.error("Error scraping Jsoup site {}: {}", url, e.getMessage());
-            return new BigDecimal(0);
+            return new ScrapeResult(new BigDecimal(0), false);
         }
     }
 
@@ -35,4 +37,6 @@ public abstract class AbstractJsoupScraping implements ScrapingStrategy {
     }
 
     protected abstract BigDecimal extractPriceFromDocument(Document doc);
+
+    protected abstract boolean extractAvailableStatusFromDocument(Document doc);
 }

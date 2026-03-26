@@ -41,6 +41,7 @@ public class ProductRestController {
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         product.setLastUpdated(LocalDateTime.now());
         product.setCurrentPrice(null);
+        product.setIsAvailable(false);
         return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(product));
     }
 

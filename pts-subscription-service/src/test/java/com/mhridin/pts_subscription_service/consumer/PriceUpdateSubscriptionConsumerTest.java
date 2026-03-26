@@ -80,6 +80,7 @@ class PriceUpdateSubscriptionConsumerTest {
         event.setStatus("SUCCESS");
         event.setProductId(1L);
         event.setNewPrice(BigDecimal.valueOf(100));
+        event.setAvailableStatus(true);
         Product product = new Product();
         product.setId(1L);
         Subscription subscription = new Subscription();

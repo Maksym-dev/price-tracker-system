@@ -12,5 +12,6 @@ import java.math.BigDecimal;
 public class PriceUpdateEvent {
     private Long productId;
     private BigDecimal newPrice;
+    private Boolean availableStatus;
     private String status; // SUCCESS, FAILED
 }

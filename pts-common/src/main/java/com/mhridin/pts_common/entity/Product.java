@@ -29,4 +29,7 @@ public class Product {
 
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated;
+
+    @Column(name = "is_available")
+    private Boolean isAvailable;
 }

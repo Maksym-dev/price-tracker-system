@@ -12,7 +12,9 @@ import java.math.BigDecimal;
 public class RozetkaScrapingStrategy extends AbstractJsoupScraping {
 
     private static final String ROZETKA_DOMAIN = "rozetka.com.ua";
-    private static final String CSS_SELECTOR = ".product-price__big";
+    private static final String PRICE_CSS_SELECTOR = ".product-price__big";
+    private static final String AVAILABLE_STATUS_CSS_SELECTOR = ".status-label";
+    private static final String AVAILABLE_STATUS_TEXT = "Є в наявності";
 
     public RozetkaScrapingStrategy() {
         super(ROZETKA_DOMAIN);
@@ -20,7 +22,7 @@ public class RozetkaScrapingStrategy extends AbstractJsoupScraping {
 
     @Override
     protected BigDecimal extractPriceFromDocument(Document doc) {
-        Element priceElement = doc.selectFirst(CSS_SELECTOR);
+        Element priceElement = doc.selectFirst(PRICE_CSS_SELECTOR);
 
         if (priceElement == null) {
             log.info("Price element not found for {}", ROZETKA_DOMAIN);
@@ -30,5 +32,18 @@ public class RozetkaScrapingStrategy extends AbstractJsoupScraping {
         // Clear string
         String priceText = priceElement.text().replaceAll("[^0-9,.]", "").replace(",", ".");
         return new BigDecimal(priceText);
+    }
+
+    @Override
+    protected boolean extractAvailableStatusFromDocument(Document doc) {
+        Element statusElement = doc.selectFirst(AVAILABLE_STATUS_CSS_SELECTOR);
+
+        if (statusElement == null) {
+            log.info("Status element not found for {}", ROZETKA_DOMAIN);
+            return false;
+        }
+
+        String statusText = statusElement.text().trim();
+        return statusText.equalsIgnoreCase(AVAILABLE_STATUS_TEXT);
     }
 }
