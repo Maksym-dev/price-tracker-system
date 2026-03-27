@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.util.backoff.ExponentialBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,5 +34,12 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, PriceUpdateEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public DefaultErrorHandler errorHandler() {
+        ExponentialBackOff backOff = new ExponentialBackOff(60000L, 1.5);
+        backOff.setMaxAttempts(10);
+        return new DefaultErrorHandler(backOff);
     }
 }
