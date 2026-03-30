@@ -14,7 +14,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.net.URI;
+
+import static com.mhridin.pts_common.utils.DomainConfigUtils.getDomain;
 
 @Service
 @Slf4j
@@ -62,14 +63,6 @@ public class PriceCheckScraperConsumer {
 
             kafkaTemplate.send(updateTopic, event.getProductId().toString(),
                     new PriceUpdateEvent(event.getProductId(), null, false, "FAILED"));
-        }
-    }
-
-    private String getDomain(String url) {
-        try {
-            return new URI(url).toURL().getHost();
-        } catch (Exception e) {
-            return "unknown";
         }
     }
 }
