@@ -22,6 +22,7 @@
         <module>pts-scraper-service</module>
         <module>pts-history-service</module>
         <module>pts-notification-service</module>
+        <module>pts-admin-service</module>
     </modules>
 
 </project>
