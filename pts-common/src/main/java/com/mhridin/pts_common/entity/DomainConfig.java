@@ -3,10 +3,12 @@ package com.mhridin.pts_common.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "domain_configs")
 @Data
-public class DomainConfig {
+public class DomainConfig implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

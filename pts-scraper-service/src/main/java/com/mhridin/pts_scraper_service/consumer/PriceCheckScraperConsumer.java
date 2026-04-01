@@ -59,7 +59,7 @@ public class PriceCheckScraperConsumer {
             log.info("Successfully scraped price for product {}: {}", event.getProductId(), result.getPrice());
 
         } catch (Exception e) {
-            log.error("Failed to scrape product {}: {}", event.getProductId(), e.getMessage());
+            log.error("Failed to scrape product " + event.getProductId(), e);
 
             kafkaTemplate.send(updateTopic, event.getProductId().toString(),
                     new PriceUpdateEvent(event.getProductId(), null, false, "FAILED"));
