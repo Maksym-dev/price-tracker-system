@@ -1,7 +1,7 @@
 package com.mhridin.pts_scraper_service.scraper;
 
 import com.mhridin.pts_common.entity.DomainConfig;
-import com.mhridin.pts_common.repository.DomainConfigRepository;
+import com.mhridin.pts_scraper_service.service.DomainConfigService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -18,15 +18,18 @@ import static com.mhridin.pts_common.utils.DomainConfigUtils.getDomain;
 @Slf4j
 public class ConfigurableJsoupScraping implements ScrapingStrategy {
 
-    private final DomainConfigRepository configRepository;
+    private final DomainConfigService domainConfigService;
 
     @Override
     public ScrapeResult fetch(String url) {
         try {
             String domain = getDomain(url);
 
-            DomainConfig config = configRepository.findByDomainAndIsActiveTrue(domain)
-                    .orElseThrow(() -> new RuntimeException("No config for domain: " + domain));
+            DomainConfig config = domainConfigService.findDomainConfigByDomain(domain);
+
+            if (config == null) {
+                throw new RuntimeException("No config for domain: " + domain);
+            }
 
             Document doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
@@ -45,7 +48,7 @@ public class ConfigurableJsoupScraping implements ScrapingStrategy {
 
     @Override
     public boolean supports(String url) {
-        return configRepository.findByDomainAndIsActiveTrue(getDomain(url)).isPresent();
+        return domainConfigService.findDomainConfigByDomain(getDomain(url)) != null;
     }
 
     protected BigDecimal extractPriceFromDocument(Document doc, String priceSelector) {
