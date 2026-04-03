@@ -3,12 +3,15 @@ package com.mhridin.pts_subscription_service.consumer;
 import com.mhridin.pts_common.entity.Product;
 import com.mhridin.pts_common.entity.Subscription;
 import com.mhridin.pts_common.exception.ProductNotFoundException;
+import com.mhridin.pts_common.kafka.NotificationEvent;
 import com.mhridin.pts_common.kafka.PriceUpdateEvent;
 import com.mhridin.pts_common.repository.ProductRepository;
 import com.mhridin.pts_common.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +25,10 @@ public class PriceUpdateSubscriptionConsumer {
 
     private final ProductRepository productRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final KafkaTemplate<String, NotificationEvent> kafkaNotificationTemplate;
+
+    @Value("${app.kafka.topics.notifications}")
+    private String notificationTopic;
 
     @KafkaListener(topics = "price-update-events", groupId = "subscription-group")
     public void consumePriceUpdate(PriceUpdateEvent event) {
@@ -56,6 +63,15 @@ public class PriceUpdateSubscriptionConsumer {
     }
 
     private void sendNotificationEvent(Subscription sub, Product product, BigDecimal newPrice) {
-        log.info("TODO: Send message to Kafka for Notification Service");
+        NotificationEvent notification = new NotificationEvent(
+                sub.getUser().getEmail(),
+                product.getTitle(),
+                newPrice,
+                product.getUrl()
+        );
+
+        kafkaNotificationTemplate.send(notificationTopic, sub.getUser().getId().toString(), notification);
+        log.info("Notification task sent for user {} regarding product {}",
+                sub.getUser().getId(), product.getId());
     }
 }
