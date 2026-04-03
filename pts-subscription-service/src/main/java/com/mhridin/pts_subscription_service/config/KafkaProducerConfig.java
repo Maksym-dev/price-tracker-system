@@ -1,5 +1,6 @@
 package com.mhridin.pts_subscription_service.config;
 
+import com.mhridin.pts_common.kafka.NotificationEvent;
 import com.mhridin.pts_common.kafka.PriceCheckEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -30,7 +31,21 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    public ProducerFactory<String, NotificationEvent> producerNotificationFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
     public KafkaTemplate<String, PriceCheckEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, NotificationEvent> kafkaNotificationTemplate() {
+        return new KafkaTemplate<>(producerNotificationFactory());
     }
 }

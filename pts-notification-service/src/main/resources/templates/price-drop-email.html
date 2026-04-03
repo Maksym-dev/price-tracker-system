@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .container { font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; }
+        .price { color: #27ae60; font-size: 20px; font-weight: bold; }
+        .btn { background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Good news!</h2>
+    <p>The price of the product <strong th:text="${productTitle}">Name of product</strong> has decreased.</p>
+    <p>Current price: <span class="price" th:text="${newPrice}">99.99</span></p>
+    <br>
+    <a th:href="${url}" class="btn">Proceed to purchase</a>
+    <p style="margin-top: 20px; font-size: 12px; color: #7f8c8d;">
+        You received this email because you are subscribed to price tracking in Price Tracker System.
+    </p>
+</div>
+</body>
+</html>
