@@ -3,14 +3,15 @@ package com.mhridin.pts_admin_service.controller;
 import com.mhridin.pts_common.entity.DomainConfig;
 import com.mhridin.pts_common.repository.DomainConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/domain-configs")
@@ -24,10 +25,10 @@ public class DomainConfigRestController {
     }
 
     @GetMapping
-    public List<DomainConfig> getAllDomainConfigs() {
-        Iterable<DomainConfig> all = domainConfigRepository.findAll();
-        return StreamSupport.stream(all.spliterator(), false)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<DomainConfig>> getAllDomainConfigs(@PageableDefault(sort = "domain", direction = Sort.Direction.ASC)
+                                                      Pageable pageable) {
+        Page<DomainConfig> all = domainConfigRepository.findAll(pageable);
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")

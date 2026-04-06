@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -34,12 +35,13 @@ class ProductRestControllerTest {
         Product product = new Product();
         product.setId(1L);
         all.add(product);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("title").ascending());
 
-        when(productRepository.findAll()).thenReturn(all);
+        when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(all));
 
-        List<Product> allProducts = productRestController.getAllProducts();
+        Page<Product> allProducts = productRestController.getAllProducts(pageable).getBody();
 
-        verify(productRepository, times(1)).findAll();
+        verify(productRepository, times(1)).findAll(pageable);
         assertThat(allProducts).isNotEmpty();
     }
 
