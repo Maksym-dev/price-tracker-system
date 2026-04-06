@@ -13,15 +13,16 @@ import com.mhridin.pts_common.repository.SubscriptionRepository;
 import com.mhridin.pts_common.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/subscriptions")
@@ -47,19 +48,11 @@ public class SubscriptionRestController {
     }
 
     @GetMapping
-    public List<SubscriptionDto> getAllSubscriptions() {
-        Iterable<Subscription> all = subscriptionRepository.findAll();
-        List<Subscription> subscriptions = StreamSupport.stream(all.spliterator(), false)
-                .toList();
-        return subscriptions.stream().map(elem -> {
-            SubscriptionDto dto = new SubscriptionDto();
-            dto.setId(elem.getId());
-            dto.setProductId(elem.getProduct().getId());
-            dto.setUserId(elem.getUser().getId());
-            dto.setTargetPrice(elem.getTargetPrice());
-            dto.setActive(elem.isActive());
-            return dto;
-        }).collect(Collectors.toList());
+    public ResponseEntity<Page<SubscriptionDto>> getAllSubscriptions(@PageableDefault(sort = "targetPrice", direction = Sort.Direction.ASC)
+                                                                         Pageable pageable) {
+        Page<Subscription> all = subscriptionRepository.findAll(pageable);
+        Page<SubscriptionDto> dtoPage = all.map(SubscriptionDto::new);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @GetMapping("/{id}")

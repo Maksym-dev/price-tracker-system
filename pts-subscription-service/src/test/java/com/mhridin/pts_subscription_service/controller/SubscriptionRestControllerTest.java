@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -61,12 +62,13 @@ class SubscriptionRestControllerTest {
         subscription.setProduct(new Product());
         subscription.setUser(new User());
         all.add(subscription);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("targetPrice").ascending());
 
-        when(subscriptionRepository.findAll()).thenReturn(all);
+        when(subscriptionRepository.findAll(pageable)).thenReturn(new PageImpl<>(all));
 
-        List<SubscriptionDto> allSubscriptions = subscriptionRestController.getAllSubscriptions();
+        Page<SubscriptionDto> allSubscriptions = subscriptionRestController.getAllSubscriptions(pageable).getBody();
 
-        verify(subscriptionRepository, times(1)).findAll();
+        verify(subscriptionRepository, times(1)).findAll(pageable);
         assertThat(allSubscriptions).isNotEmpty();
     }
 
