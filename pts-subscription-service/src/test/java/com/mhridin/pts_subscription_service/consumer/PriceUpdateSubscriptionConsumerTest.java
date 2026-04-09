@@ -2,6 +2,8 @@ package com.mhridin.pts_subscription_service.consumer;
 
 import com.mhridin.pts_common.entity.Product;
 import com.mhridin.pts_common.entity.Subscription;
+import com.mhridin.pts_common.entity.User;
+import com.mhridin.pts_common.kafka.NotificationEvent;
 import com.mhridin.pts_common.kafka.PriceUpdateEvent;
 import com.mhridin.pts_common.repository.ProductRepository;
 import com.mhridin.pts_common.repository.SubscriptionRepository;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +29,9 @@ class PriceUpdateSubscriptionConsumerTest {
 
     @Mock
     private SubscriptionRepository subscriptionRepository;
+
+    @Mock
+    private KafkaTemplate<String, NotificationEvent> kafkaNotificationTemplate;
 
     @InjectMocks
     private PriceUpdateSubscriptionConsumer priceUpdateSubscriptionConsumer;
@@ -83,10 +89,13 @@ class PriceUpdateSubscriptionConsumerTest {
         event.setAvailableStatus(true);
         Product product = new Product();
         product.setId(1L);
+        User user = new User();
+        user.setId(3L);
         Subscription subscription = new Subscription();
         subscription.setId(2L);
         subscription.setProduct(product);
         subscription.setTargetPrice(BigDecimal.valueOf(150));
+        subscription.setUser(user);
 
         when(productRepository.findById(event.getProductId())).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
