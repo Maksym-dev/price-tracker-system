@@ -42,7 +42,7 @@ public class ConfigurableJsoupScraping implements ScrapingStrategy {
             return new ScrapeResult(price, availableStatus);
         } catch (Exception e) {
             log.error("Error scraping Jsoup site {}: {}", url, e.getMessage());
-            return new ScrapeResult(new BigDecimal(0), false);
+            return new ScrapeResult(BigDecimal.ZERO, false);
         }
     }
 
@@ -56,7 +56,7 @@ public class ConfigurableJsoupScraping implements ScrapingStrategy {
 
         if (priceElement == null) {
             log.warn("Price element not found for selector: {}", priceSelector);
-            return new BigDecimal(0);
+            return BigDecimal.ZERO;
         }
 
         // Clear string

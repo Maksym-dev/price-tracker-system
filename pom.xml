@@ -25,4 +25,28 @@
         <module>pts-admin-service</module>
     </modules>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.28.0</version>
+                <configuration>
+                    <skipEmptyReport>false</skipEmptyReport>
+                    <format>html</format>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>aggregate-pmd</goal>
+                            <goal>check</goal>
+                            <goal>aggregate-cpd</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
