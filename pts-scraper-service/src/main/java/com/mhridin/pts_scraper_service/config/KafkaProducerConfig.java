@@ -38,8 +38,9 @@ public class KafkaProducerConfig {
 
     @Bean
     public DefaultErrorHandler errorHandler() {
-        ExponentialBackOff backOff = new ExponentialBackOff(60000L, 1.5);
+        ExponentialBackOff backOff = new ExponentialBackOff(30000L, 1.5);
         backOff.setMaxAttempts(10);
+        backOff.setMaxInterval(60000L);
         return new DefaultErrorHandler(backOff);
     }
 }
