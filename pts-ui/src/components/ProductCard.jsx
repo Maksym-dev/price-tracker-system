@@ -29,7 +29,7 @@ export const ProductCard = ({ product }) => {
       </div>
       {/* Ссылка на страницу аналитики в самом низу карточки */}
       <Link
-        to={`/analytics/${product.id}`}
+        to={`/analytics/${product.productId}`}
         className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-lg text-sm font-medium transition-colors border border-gray-100 hover:border-blue-200"
       >
         <BarChart2 size={16} />

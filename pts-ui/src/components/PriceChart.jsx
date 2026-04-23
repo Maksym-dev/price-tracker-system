@@ -26,7 +26,7 @@ const PriceChart = ({ data }) => {
         <div className="bg-white p-3 shadow-lg rounded-lg border border-gray-100">
           <p className="text-xs text-gray-500 mb-1">{label}</p>
           <p className="text-sm font-bold text-blue-600">
-            {payload[0].value.toLocaleString()} ₽
+            {payload[0].value.toLocaleString()} ₴
           </p>
         </div>
       );
