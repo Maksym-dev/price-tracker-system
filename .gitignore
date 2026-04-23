@@ -36,3 +36,4 @@ hs_err_pid*
 replay_pid*
 
 HELP.md
+/pts-ui/node_modules/
