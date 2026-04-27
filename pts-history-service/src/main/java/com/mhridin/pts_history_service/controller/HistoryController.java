@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/history")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class HistoryController {
 
@@ -25,7 +27,7 @@ public class HistoryController {
                                                                    @PageableDefault(sort = "timestamp", direction = Sort.Direction.ASC)
                                                                    Pageable pageable) {
         Page<PriceHistoryDto> list = repository.findAllByProductId(productId, pageable)
-                .map(h -> new PriceHistoryDto(h.getPrice(), h.getTimestamp()));
+                .map(h -> new PriceHistoryDto(h.getPrice(), h.getTimestamp().toLocalDate()));
         return ResponseEntity.ok(list);
     }
 }

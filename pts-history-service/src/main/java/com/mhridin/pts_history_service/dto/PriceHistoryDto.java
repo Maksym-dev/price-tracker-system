@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +14,5 @@ import java.time.LocalDateTime;
 @Setter
 public class PriceHistoryDto {
     private BigDecimal price;
-    private LocalDateTime timestamp;
+    private LocalDate date;
 }

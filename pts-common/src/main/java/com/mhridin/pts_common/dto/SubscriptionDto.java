@@ -1,5 +1,6 @@
 package com.mhridin.pts_common.dto;
 
+import com.mhridin.pts_common.entity.Product;
 import com.mhridin.pts_common.entity.Subscription;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,13 +17,20 @@ public class SubscriptionDto {
     private Long id;
     private Long userId;
     private Long productId;
+    private String title;
+    private String url;
+    private BigDecimal currentPrice;
     private BigDecimal targetPrice;
     private boolean isActive;
 
     public SubscriptionDto(Subscription subscription) {
         id = subscription.getId();
         userId = subscription.getUser().getId();
-        productId = subscription.getProduct().getId();
+        Product product = subscription.getProduct();
+        productId = product.getId();
+        title = product.getTitle();
+        url = product.getUrl();
+        currentPrice = product.getCurrentPrice();
         targetPrice = subscription.getTargetPrice();
         isActive = subscription.isActive();
     }

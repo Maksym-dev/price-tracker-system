@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
 
+    @EntityGraph(attributePaths = {"product"})
     Page<Subscription> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = {"user"})
