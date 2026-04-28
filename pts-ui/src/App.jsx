@@ -10,8 +10,8 @@ import ProductAnalytics from './pages/ProductAnalytics';
 const App = () => {
   return (
     <AuthProvider>
-      <Layout>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Layout>
           <Routes>
             {/* Публичный роут */}
             <Route path="/login" element={<LoginPage />} />
@@ -35,8 +35,8 @@ const App = () => {
               }
             />
           </Routes>
-        </BrowserRouter>
-      </Layout>
+        </Layout>
+      </BrowserRouter>
     </AuthProvider>
   );
 };
