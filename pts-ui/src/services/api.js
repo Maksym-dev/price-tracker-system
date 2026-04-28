@@ -43,8 +43,8 @@ export const subscriptionService = {
 };
 
 export const productService = {
-  getProducts: async () => {
-    const response = await apiClient.get('/products');
+  getProducts: async (page, pageSize) => {
+    const response = await apiClient.get(`/products?page=${page}&size=${pageSize}`);
     return response.data;
   },
   getProductById: async (id) => {
