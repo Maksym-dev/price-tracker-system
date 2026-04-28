@@ -24,7 +24,7 @@ const Navbar = () => {
               <div className="bg-blue-600 p-1.5 rounded-lg shadow-sm">
                 <TrendingUp className="text-white" size={20} />
               </div>
-              <span className="text-xl font-bold text-gray-900 hidden sm:block">
+              <span className="text-xl font-bold text-gray-900 sm:block">
                 PriceTracker
               </span>
             </div>
@@ -83,7 +83,7 @@ const Navbar = () => {
           </div>
           ) : (
               <div className="flex items-center gap-2 sm:gap-4">
-                <Link to="/login" className="hover:underline items-center text-xl font-bold text-gray-900 hidden sm:block">
+                <Link to="/login" className="hover:underline items-center text-xl font-bold text-gray-900 sm:block">
                   Войти
                 </Link>
               </div>
@@ -92,7 +92,7 @@ const Navbar = () => {
       </div>
 
       {/* Мобильное меню (выпадающее) */}
-      {isMobileMenuOpen && (
+      {user && isMobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-200 animate-in slide-in-from-top duration-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a href="#" className="block px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-700">Дашборд</a>
@@ -113,8 +113,10 @@ const Navbar = () => {
               <button className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 flex items-center gap-2">
                 <Settings size={18} /> Настройки
               </button>
-              <button className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 flex items-center gap-2">
-                <LogOut size={18} /> Выйти
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 flex items-center gap-2">
+                <LogOut size={18} /> Logout
               </button>
             </div>
           </div>
