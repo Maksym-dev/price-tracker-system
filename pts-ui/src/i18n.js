@@ -81,6 +81,45 @@ const resources = {
       "difference": "Разница",
       "chart_title": "Динамика стоимости"
     }
+  },
+  ua: {
+    translation: {
+      "pts_ui_app_description": "Стежте за кращими пропозиціями в реальному часі",
+      "api_error": "Дані не знайдені або сталася помилка API",
+      "dashboard_title": "Мої підписки",
+      "add_product": "Додати товар",
+      "add_subscription": "Додати передплату",
+      "select_product_title": "Виберіть товар",
+      "loading": "Завантаження...",
+      "logout": "Вийти",
+      "login": "Увійти",
+      "current_price": "Поточна ціна",
+      "target_price": "Цільова ціна",
+      "stores_title": "Магазини",
+      "price_history_title": "Історія цін",
+      "settings_title": "Налаштування",
+      "back_pagination_button": "Назад",
+      "page_title": "Сторінка",
+      "page_of_title": "із",
+      "next_pagination_button": "Вперед",
+      "selected_url_title": "Вибраний URL",
+      "product_placeholder": "Клікніть на картку вище",
+      "target_price_reached": "Ціни досягнуто",
+      "target_price_in_search": "У пошуку",
+      "show_price_history": "Подивитися історію цін",
+      "rights_footer": "Всі права захищені.",
+      "help_footer": "Допомога",
+      "privacy_footer": "Конфіденційність",
+      "no_data_for_chart": "Немає даних для побудови графіка",
+      "password_title": "Пароль",
+      "login_in_title": "Вхід до",
+      "back_to_subscriptions": "Повернутися до передплат",
+      "price_report_description": "Детальний звіт про зміну ціни за останні 30 днів",
+      "min": "Мінімум",
+      "max": "Максимум",
+      "difference": "Різниця",
+      "chart_title": "Динаміка вартості"
+    }
   }
 };
 

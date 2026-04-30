@@ -37,6 +37,7 @@ const Navbar = () => {
               <div className="flex gap-4">
                 <button onClick={() => changeLanguage('ru')} className="hover:underline">RU</button>
                 <button onClick={() => changeLanguage('en')} className="hover:underline">EN</button>
+                <button onClick={() => changeLanguage('ua')} className="hover:underline">UA</button>
               </div>
             </div>
             
