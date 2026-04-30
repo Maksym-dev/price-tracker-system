@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { AddProductForm } from '../components/AddProductForm';
 import { ProductCard } from '../components/ProductCard';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { subscriptionService } from '../services/api';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
+
   const queryClient = useQueryClient();
 
   // Получение данных
@@ -24,10 +27,10 @@ const Dashboard = () => {
     },
   });
 
-  if (isLoading) return <div>Загрузка...</div>;
+  if (isLoading) return <div>{t('loading')}</div>;
 
   if (!Array.isArray(subscriptions)) {
-    return <div>Данные не найдены или произошла ошибка API</div>;
+    return <div>{t('api_error')}</div>;
   }
 
   const handleAddProduct = (newSub) => {
@@ -40,7 +43,7 @@ const Dashboard = () => {
       <div className="max-w-6xl mx-auto">
         <header className="mb-10">
           <h1 className="text-3xl font-extrabold text-gray-900">Price Tracker</h1>
-          <p className="text-gray-600">Следите за лучшими предложениями в реальном времени</p>
+          <p className="text-gray-600">{t('pts_ui_app_description')}</p>
         </header>
 
         <AddProductForm onAdd={handleAddProduct} />

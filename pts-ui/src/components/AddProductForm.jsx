@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { productService } from '../services/api';
 
 export const AddProductForm = ({ onAdd }) => {
+  const { t } = useTranslation();
+
   const [selectedUrl, setSelectedUrl] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
 
@@ -34,7 +37,7 @@ export const AddProductForm = ({ onAdd }) => {
 
 return (
     <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 mb-8">
-      <h2 className="text-xl font-bold mb-6 text-gray-800 text-center">Выберите товар</h2>
+      <h2 className="text-xl font-bold mb-6 text-gray-800 text-center">{t('select_product_title')}</h2>
       
       {isLoading ? (
         <div className="flex justify-center py-10">
@@ -69,11 +72,11 @@ return (
               disabled={page === 0}
               className="px-4 py-2 bg-gray-100 rounded-lg disabled:opacity-50 hover:bg-gray-200 transition-colors"
             >
-              ← Назад
+              ← {t('back_pagination_button')}
             </button>
             
             <span className="font-medium text-gray-600">
-              Страница {page + 1} из {totalPages}
+              {t('page_title')} {page + 1} {t('page_of_title')} {totalPages}
             </span>
 
             <button 
@@ -85,7 +88,7 @@ return (
               disabled={data?.last || page + 1 >= totalPages}
               className="px-4 py-2 bg-gray-100 rounded-lg disabled:opacity-50 hover:bg-gray-200 transition-colors"
             >
-              Вперед →
+              {t('next_pagination_button')} →
             </button>
           </div>
         </>
@@ -94,17 +97,17 @@ return (
       {/* Форма подтверждения */}
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 items-end border-t pt-6">
         <div className="flex-1 w-full">
-          <label className="block text-sm font-medium text-gray-600 mb-1">Выбранный URL</label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">{t('selected_url_title')}</label>
           <input
             type="text"
             readOnly
             value={selectedUrl}
             className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-500 outline-none"
-            placeholder="Кликните на карточку выше"
+            placeholder={t('product_placeholder')}
           />
         </div>
         <div className="w-full sm:w-40">
-          <label className="block text-sm font-medium text-gray-600 mb-1">Ваша цена</label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">{t('target_price')}</label>
           <input
             type="number"
             value={targetPrice}
@@ -118,7 +121,7 @@ return (
           disabled={!selectedUrl}
           className="bg-blue-600 text-white py-3 px-8 rounded-lg font-bold hover:bg-blue-700 disabled:bg-gray-300"
         >
-          Добавить
+          {t('add_subscription')}
         </button>
       </form>
     </div>

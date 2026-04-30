@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import PriceChart from '../components/PriceChart';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'; // Если используешь Heroicons
 import { productService, historyService } from '../services/api';
 
 const ProductAnalytics = () => {
+  const { t } = useTranslation();
+
   const { productId } = useParams(); // Получаем ID из пути /analytics/:productId
   const [history, setHistory] = useState([]);
   const [product, setProduct] = useState(null);
@@ -64,20 +67,20 @@ const ProductAnalytics = () => {
       {/* Кнопка назад */}
       <Link to="/" className="inline-flex items-center text-sm text-blue-600 hover:underline mb-6">
         <ArrowLeftIcon className="w-4 h-4 mr-1" />
-        Вернуться к подпискам
+        {t('back_to_subscriptions')}
       </Link>
 
       <header className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">{product?.title}</h1>
-        <p className="text-gray-500">Детальный отчет об изменении цены за последние 30 дней</p>
+        <p className="text-gray-500">{t('price_report_description')}</p>
       </header>
 
       {/* Основной контейнер с графиком */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-semibold text-gray-800">Динамика стоимости</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t('chart_title')}</h2>
           <div className="text-right">
-            <span className="text-sm text-gray-400">Текущая цена:</span>
+            <span className="text-sm text-gray-400">{t('current_price')}:</span>
             <p className="text-xl font-bold text-green-600">{product?.currentPrice} ₴</p>
           </div>
         </div>
@@ -89,15 +92,15 @@ const ProductAnalytics = () => {
       {/* Дополнительная карточка со статистикой */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
         <div className="bg-blue-50 p-4 rounded-xl">
-          <p className="text-xs text-blue-600 font-medium uppercase">Минимум</p>
+          <p className="text-xs text-blue-600 font-medium uppercase">{t('min')}</p>
           <p className="text-lg font-bold">41 500 ₴</p>
         </div>
         <div className="bg-red-50 p-4 rounded-xl">
-          <p className="text-xs text-red-600 font-medium uppercase">Максимум</p>
+          <p className="text-xs text-red-600 font-medium uppercase">{t('max')}</p>
           <p className="text-lg font-bold">46 000 ₴</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-xl">
-          <p className="text-xs text-gray-600 font-medium uppercase">Разница</p>
+          <p className="text-xs text-gray-600 font-medium uppercase">{t('difference')}</p>
           <p className="text-lg font-bold text-green-600">-9.7%</p>
         </div>
       </div>

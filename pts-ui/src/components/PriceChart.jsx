@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   AreaChart,
   Area,
@@ -10,11 +11,13 @@ import {
 } from 'recharts';
 
 const PriceChart = ({ data }) => {
+  const { t } = useTranslation();
+
   // Проверка на наличие данных
   if (!data || data.length === 0) {
     return (
       <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-        <p className="text-gray-400 text-sm">Нет данных для построения графика</p>
+        <p className="text-gray-400 text-sm">{t('no_data_for_chart')}</p>
       </div>
     );
   }

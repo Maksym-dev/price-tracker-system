@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
@@ -17,7 +20,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Вход в Price Tracker</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">{t('login_in_title')} Price Tracker</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Email</label>
@@ -30,7 +33,7 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 mb-2">Пароль</label>
+            <label className="block text-gray-700 mb-2">{t('password_title')}</label>
             <input 
               type="password" 
               className="w-full p-2 border rounded"
@@ -43,7 +46,7 @@ const LoginPage = () => {
             type="submit" 
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
           >
-            Войти
+            {t('login')}
           </button>
         </form>
       </div>

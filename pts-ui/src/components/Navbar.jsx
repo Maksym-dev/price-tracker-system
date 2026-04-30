@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Bell, TrendingUp, Settings, Menu, X, User, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { i18n, t } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -27,18 +34,22 @@ const Navbar = () => {
               <span className="text-xl font-bold text-gray-900 sm:block">
                 PriceTracker
               </span>
+              <div className="flex gap-4">
+                <button onClick={() => changeLanguage('ru')} className="hover:underline">RU</button>
+                <button onClick={() => changeLanguage('en')} className="hover:underline">EN</button>
+              </div>
             </div>
             
             {user ? (
               <div className="hidden md:ml-8 md:flex md:space-x-4">
                 <a href="#" className="px-3 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600">
-                  Дашборд
+                  {t('dashboard_title')}
                 </a>
                 <a href="#" className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">
-                  История цен
+                  {t('price_history_title')}
                 </a>
                 <a href="#" className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">
-                  Магазины
+                  {t('stores_title')}
                 </a>
               </div>
             ) : (
@@ -57,7 +68,7 @@ const Navbar = () => {
               <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-gray-200">
                 <div className="text-right">
                   <p className="text-sm font-semibold text-gray-900 leading-none">John Doe</p>
-                  <p className="text-xs text-gray-500 mt-1">Premium Plan</p>
+                  <p className="text-xs text-gray-500 mt-1">john@example.com</p>
                 </div>
                 <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
                   <User size={18} />
@@ -67,7 +78,7 @@ const Navbar = () => {
                   className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   <LogOut size={18} />
-                  <span>Logout</span>
+                  <span>{t('logout')}</span>
                 </button>
               </div>
 
@@ -84,7 +95,7 @@ const Navbar = () => {
           ) : (
               <div className="flex items-center gap-2 sm:gap-4">
                 <Link to="/login" className="hover:underline items-center text-xl font-bold text-gray-900 sm:block">
-                  Войти
+                  {t('login')}
                 </Link>
               </div>
           )}
@@ -95,9 +106,9 @@ const Navbar = () => {
       {user && isMobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-200 animate-in slide-in-from-top duration-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-700">Дашборд</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">История цен</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">Магазины</a>
+            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-700">{t('dashboard_title')}</a>
+            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{t('price_history_title')}</a>
+            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{t('stores_title')}</a>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="flex items-center px-4">
@@ -111,12 +122,12 @@ const Navbar = () => {
             </div>
             <div className="mt-3 px-2 space-y-1">
               <button className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 flex items-center gap-2">
-                <Settings size={18} /> Настройки
+                <Settings size={18} /> {t('settings_title')}
               </button>
               <button
                 onClick={handleLogout}
                 className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 flex items-center gap-2">
-                <LogOut size={18} /> Logout
+                <LogOut size={18} /> {t('logout')}
               </button>
             </div>
           </div>
