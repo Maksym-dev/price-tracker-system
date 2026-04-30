@@ -9,8 +9,8 @@ const Navbar = () => {
 
   const { i18n, t } = useTranslation();
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = (event) => {
+    i18n.changeLanguage(event.target.value); // Смена языка при выборе в списке 
   };
 
   const { user, logout } = useAuth();
@@ -35,9 +35,20 @@ const Navbar = () => {
                 PriceTracker
               </span>
               <div className="flex gap-4">
-                <button onClick={() => changeLanguage('ru')} className="hover:underline">RU</button>
-                <button onClick={() => changeLanguage('en')} className="hover:underline">EN</button>
-                <button onClick={() => changeLanguage('ua')} className="hover:underline">UA</button>
+                {/* Выпадающий список языков */}
+                <div className="flex items-center gap-2">
+                  <label htmlFor="lang-select" className="text-sm opacity-80">{t('language')}</label>
+                  <select
+                    id="lang-select"
+                    value={i18n.language} // Выделяет текущий активный язык
+                    onChange={changeLanguage}
+                    className="bg-blue-700 text-white border border-blue-400 rounded px-2 py-1 outline-none focus:ring-2 focus:ring-blue-300"
+                  >
+                    <option value="ru">Русский (RU)</option>
+                    <option value="en">English (EN)</option>
+                    <option value="ua">Українська (UA)</option>
+                  </select>
+                </div>
               </div>
             </div>
             

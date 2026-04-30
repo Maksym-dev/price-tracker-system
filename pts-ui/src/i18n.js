@@ -40,7 +40,8 @@ const resources = {
       "min": "Minimum",
       "max": "Maximum",
       "difference": "Difference",
-      "chart_title": "Price dynamics"
+      "chart_title": "Price dynamics",
+      "language": "Language",
     }
   },
   ru: {
@@ -79,7 +80,8 @@ const resources = {
       "min": "Минимум",
       "max": "Максимум",
       "difference": "Разница",
-      "chart_title": "Динамика стоимости"
+      "chart_title": "Динамика стоимости",
+      "language": "Язык",
     }
   },
   ua: {
@@ -118,7 +120,8 @@ const resources = {
       "min": "Мінімум",
       "max": "Максимум",
       "difference": "Різниця",
-      "chart_title": "Динаміка вартості"
+      "chart_title": "Динаміка вартості",
+      "language": "Мова",
     }
   }
 };
